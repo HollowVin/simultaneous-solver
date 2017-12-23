@@ -105,7 +105,22 @@ vector SimultaneousEquation::sum_vectors(const vector& vec1, const vector& vec2)
     return sum_vector;
 }
 
-vector SimultaneousEquation::backwards_solve(const matrix&)
+vector SimultaneousEquation::backwards_solve(const matrix& mat)
 {
+    vector solutions;
+    int last_term_position = mat.size() - 1;
     
+    for (int i = mat.size() - 1; i >= 0; i--)
+    {
+        double solution = mat[i][last_term_position + 1];
+        
+        for (int j = last_term_position; j > i; j--)
+        {
+            solution -= mat[i][j] * solutions[j];
+        }
+
+        solutions.push_back(solution);
+    }
+
+    return solutions;
 }
