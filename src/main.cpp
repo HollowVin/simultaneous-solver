@@ -3,18 +3,26 @@
 
 int main()
 {
-    vector vector1 = {4, 1, 3, 2, 9};
-    vector vector2 = {3, 5, 1, 0, 1};
-    vector vector3 = {7, 6, 1, 2, 10};
-    vector vector4 = {-4, 1, 2, -5, 2};
+    vector vector1 = {1, 0, 0, 0, 0};
+    vector vector2 = {0, 0, 1, 0, 0};
+    vector vector3 = {0, 1, 0, 0, 0};
+    vector vector4 = {0, 0, 0, 1, 0};
 
     matrix matrix_equations = {vector1, vector2, vector3, vector4};
     SimultaneousEquation equations(matrix_equations);
     vector solutions = equations.solve_gauss();
 
-    for (int i = 0; i < solutions.size(); i++)
+    if (solutions.empty())
     {
-        std::cout << solutions[i] << std::endl;
+        std::cout << "La matriz ingresada no tiene soluciones válidas" << std::endl;
+    }
+
+    else
+    {
+        for (int i = 0; i < solutions.size(); i++)
+        {
+            std::cout << solutions[i] << std::endl;
+        }
     }
 
     return 0;

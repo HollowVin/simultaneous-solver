@@ -5,14 +5,7 @@ SimultaneousEquation::SimultaneousEquation(matrix equations): equations(equation
 vector SimultaneousEquation::solve_gauss()
 {
     matrix triangular = triangular_matrix(equations);
-
-    if (triangular == equations)
-    {
-        return vector(); // is it good or bad to return an empty vector as a way to signal failure?
-        // these return values on failures for these functions don't really seem appropriate
-    }
-    
-    return backwards_solve(triangular);
+    return triangular.empty() ? vector() : backwards_solve(triangular);
 }
 
 matrix SimultaneousEquation::triangular_matrix(const matrix& mat)
@@ -21,11 +14,11 @@ matrix SimultaneousEquation::triangular_matrix(const matrix& mat)
     
     for (int i = 0; i < mat.size(); i++)
     {
-        if (triangular[i][i] != 1) // if at least one variable is present, the lack of an ability to set the pivot at any point is not bad
+        if (triangular[i][i] != 1)
         { 
-            if (!set_pivot(triangular, i)) // condition for an invalid equations matrix
+            if (!set_pivot(triangular, i))
             {
-                return mat; // perhaps make this be handled better than just returning the original matrix
+                return matrix();
             }
         }
 
