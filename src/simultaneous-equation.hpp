@@ -11,7 +11,7 @@ class SimultaneousEquation
 
         static matrix triangular_matrix(const matrix&);
         static bool set_pivot(matrix&, int);
-        static int find_nonzero_row(const matrix&, int);
+        static int find_nonzero_row_below(const matrix&, int);
         static void switch_rows(matrix&, int, int);
         static void reduce_rows_below(matrix&, int);
         static vector multiply_vector_by_scalar(const vector&, double);

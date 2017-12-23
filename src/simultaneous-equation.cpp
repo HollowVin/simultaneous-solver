@@ -32,7 +32,7 @@ bool SimultaneousEquation::set_pivot(matrix& mat, int row)
 {
     if (mat[row][row] == 0)
     {
-        int row_switch = find_nonzero_row(mat, row);
+        int row_switch = find_nonzero_row_below(mat, row);
 
         if (row_switch > -1)    { switch_rows(mat, row, row_switch); }
         else                    { return false; }
@@ -48,13 +48,13 @@ bool SimultaneousEquation::set_pivot(matrix& mat, int row)
     return true;
 }
 
-int SimultaneousEquation::find_nonzero_row(const matrix& mat, int start = 0)
+int SimultaneousEquation::find_nonzero_row_below(const matrix& mat, int row)
 {
-    int row = -1;
+    int nonzero_row = -1;
 
-    for (int i = start; i < mat.size(); i++)
+    for (int i = row; i < mat.size(); i++)
     {
-        if (mat[i][0] != 0) { return row; }
+        if (mat[i][row] != 0) { return i; }
     }
 
     return row;
