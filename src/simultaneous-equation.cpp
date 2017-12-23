@@ -57,7 +57,7 @@ int SimultaneousEquation::find_nonzero_row_below(const matrix& mat, int row)
         if (mat[i][row] != 0) { return i; }
     }
 
-    return row;
+    return nonzero_row;
 }
 
 void SimultaneousEquation::switch_rows(matrix& mat, int row1, int row2)
