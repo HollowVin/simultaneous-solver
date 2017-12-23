@@ -67,11 +67,11 @@ void SimultaneousEquation::switch_rows(matrix& mat, int row1, int row2)
     mat[row2] = temp;
 }
 
-void SimultaneousEquation::reduce_rows_below(matrix& mat, int pivot)
+void SimultaneousEquation::reduce_rows_below(matrix& mat, int row)
 {
-    for (int i = pivot + 1; i < mat.size(); i++)
+    for (int i = row + 1; i < mat.size(); i++)
     {
-        vector scalar_vector = multiply_vector_by_scalar(mat[pivot], -mat[i][pivot]);
+        vector scalar_vector = multiply_vector_by_scalar(mat[row], -mat[i][row]);
         mat[i] = sum_vectors(mat[i], scalar_vector);
     }
 }
@@ -103,13 +103,13 @@ vector SimultaneousEquation::sum_vectors(const vector& vec1, const vector& vec2)
 vector SimultaneousEquation::backwards_solve(const matrix& mat)
 {
     vector solutions(mat.size());
-    int last_term_position = mat.size() - 1;
+    int diagonal_position = mat.size() - 1;
     
-    for (int i = mat.size() - 1; i >= 0; i--)
+    for (int i = diagonal_position; i >= 0; i--)
     {
-        double solution = mat[i][last_term_position + 1];
+        double solution = mat[i][diagonal_position + 1];
         
-        for (int j = last_term_position; j > i; j--)
+        for (int j = diagonal_position; j > i; j--)
         {
             solution -= mat[i][j] * solutions[j];
         }
