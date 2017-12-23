@@ -21,15 +21,15 @@ matrix SimultaneousEquation::triangular_matrix(const matrix& mat)
     
     for (int i = 0; i < mat.size(); i++)
     {
-        if (mat[i][i] != 1) // if at least one variable is present, the lack of an ability to set the pivot at any point is not bad
+        if (triangular[i][i] != 1) // if at least one variable is present, the lack of an ability to set the pivot at any point is not bad
         { 
             if (!set_pivot(triangular, i)) // condition for an invalid equations matrix
             {
                 return mat; // perhaps make this be handled better than just returning the original matrix
-            } 
-
-            reduce_rows_below(triangular, i);
+            }
         }
+
+        reduce_rows_below(triangular, i);
     }
 
     return triangular;
@@ -45,9 +45,11 @@ bool SimultaneousEquation::set_pivot(matrix& mat, int row)
         else                    { return false; }
     }
 
+    double pivot_value = mat[row][row];
+
     for (int i = 0; i < mat[row].size(); i++)
     {
-        mat[row][i] /= mat[row][0];
+        mat[row][i] /= pivot_value;
     }
 
     return true;
@@ -76,8 +78,8 @@ void SimultaneousEquation::reduce_rows_below(matrix& mat, int pivot)
 {
     for (int i = pivot + 1; i < mat.size(); i++)
     {
-        vector scalar_vector = multiply_vector_by_scalar(mat[pivot], -mat[i][0]);
-        mat[i] = sum_vectors(mat[pivot], scalar_vector);
+        vector scalar_vector = multiply_vector_by_scalar(mat[pivot], -mat[i][pivot]);
+        mat[i] = sum_vectors(mat[i], scalar_vector);
     }
 }
 
@@ -107,7 +109,7 @@ vector SimultaneousEquation::sum_vectors(const vector& vec1, const vector& vec2)
 
 vector SimultaneousEquation::backwards_solve(const matrix& mat)
 {
-    vector solutions;
+    vector solutions(mat.size());
     int last_term_position = mat.size() - 1;
     
     for (int i = mat.size() - 1; i >= 0; i--)
@@ -119,7 +121,7 @@ vector SimultaneousEquation::backwards_solve(const matrix& mat)
             solution -= mat[i][j] * solutions[j];
         }
 
-        solutions.push_back(solution);
+        solutions[i] = solution;
     }
 
     return solutions;
