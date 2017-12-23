@@ -8,8 +8,11 @@ vector SimultaneousEquation::solve_gauss()
 
     if (triangular == equations)
     {
-        
+        return vector(); // is it good or bad to return an empty vector as a way to signal failure?
+        // these return values on failures for these functions don't really seem appropriate
     }
+    
+    return backwards_solve(triangular);
 }
 
 matrix SimultaneousEquation::triangular_matrix(const matrix& mat)
@@ -18,14 +21,14 @@ matrix SimultaneousEquation::triangular_matrix(const matrix& mat)
     
     for (int i = 0; i < mat.size(); i++)
     {
-        if (mat[i][0] != 1) 
+        if (mat[i][i] != 1) // if at least one variable is present, the lack of an ability to set the pivot at any point is not bad
         { 
-            if (!set_pivot(triangular, i))
+            if (!set_pivot(triangular, i)) // condition for an invalid equations matrix
             {
-                return mat;
+                return mat; // perhaps make this be handled better than just returning the original matrix
             } 
 
-            sum_vectors_by_scalar(triangular, triangular[i], i + 1);
+            reduce_rows_below(triangular, i);
         }
     }
 
@@ -34,12 +37,12 @@ matrix SimultaneousEquation::triangular_matrix(const matrix& mat)
 
 bool SimultaneousEquation::set_pivot(matrix& mat, int row)
 {
-    if (mat[row][0] == 0)
+    if (mat[row][row] == 0)
     {
         int row_switch = find_nonzero_row(mat, row);
 
-        if (row_switch > -1) { switch_rows(mat, row, row_switch); }
-        else { return false; }
+        if (row_switch > -1)    { switch_rows(mat, row, row_switch); }
+        else                    { return false; }
     }
 
     for (int i = 0; i < mat[row].size(); i++)
@@ -69,13 +72,12 @@ void SimultaneousEquation::switch_rows(matrix& mat, int row1, int row2)
     mat[row2] = temp;
 }
 
-void SimultaneousEquation::sum_vectors_by_scalar(matrix& mat, const vector& vec, int start)
+void SimultaneousEquation::reduce_rows_below(matrix& mat, int pivot)
 {
-    for (int i = start; i < mat.size(); i++)
+    for (int i = pivot + 1; i < mat.size(); i++)
     {
-        vector scalar_vector = multiply_vector_by_scalar(vec, mat[i][0]);
-        vector sum_vector = sum_vectors(vec, scalar_vector);
-        mat[i] = sum_vector;
+        vector scalar_vector = multiply_vector_by_scalar(mat[pivot], -mat[i][0]);
+        mat[i] = sum_vectors(mat[pivot], scalar_vector);
     }
 }
 
@@ -101,4 +103,9 @@ vector SimultaneousEquation::sum_vectors(const vector& vec1, const vector& vec2)
     }
 
     return sum_vector;
+}
+
+vector SimultaneousEquation::backwards_solve(const matrix&)
+{
+    
 }
