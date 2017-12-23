@@ -1,0 +1,1 @@
+First edition of a simultaneous equation solver
