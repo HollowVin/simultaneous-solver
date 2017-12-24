@@ -32,9 +32,9 @@ bool SimultaneousEquation::set_pivot(matrix& mat, int row)
 {
     if (mat[row][row] == 0)
     {
-        int row_switch = find_nonzero_row_below(mat, row);
+        int nonzero_row = find_nonzero_row_below(mat, row);
 
-        if (row_switch > -1)    { switch_rows(mat, row, row_switch); }
+        if (nonzero_row > -1)   { switch_rows(mat, row, nonzero_row); }
         else                    { return false; }
     }
 
